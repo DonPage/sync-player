@@ -13,8 +13,17 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
 
 
     .controller("homeController", function ($scope, appService) {
-        console.log("home");
-        $scope.testing = 'got test yo';
+
+        $scope.login = function (username) {
+            console.log(username);
+            if(!username){
+                return;
+            } else {
+                
+            }
+
+
+        }
 
 
     });
