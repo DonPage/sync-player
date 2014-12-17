@@ -18,7 +18,8 @@ angular.module("sync-player")
                         joined: Firebase.ServerValue.TIMESTAMP,
                         devices: "",
                         playlist: "",
-                        playingDevice: ""
+                        playingDevice: "",
+                        nowPlaying: ""
                     });
                     window.location.hash = "#/member/"+name;
                     console.log("room created");
@@ -54,9 +55,15 @@ angular.module("sync-player")
 
         this.getDevices = function (user) {
             var devices = membersSync.$child(user).$child("devices");
-            console.log(devices);
             return devices;
         };
+
+        this.getNowPlaying = function (user) {
+//            var nowPlaying = membersSync.$child(user).$child("nowPlaying");
+            console.log(navigator.platform, $scope.playingDevice.$value);
+
+            return console.log("nowplaying");
+        }
 
         function addFirebaseDevice(device, member){
             var userDevicesRef = membersRef.child(member).child("devices");

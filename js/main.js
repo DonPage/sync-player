@@ -29,6 +29,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
     })
 
     .controller("memberController", function ($scope, appService, $routeParams) {
+        var nowPlayingdevice = "";
         $scope.agent = navigator.platform;
         appService.savingDeviceLS(navigator.platform, $routeParams.username);
 
@@ -40,4 +41,11 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
         $scope.playingDevice = appService.getPlayingDevice($routeParams.username);
 
         $scope.deviceArray = appService.getDevices($routeParams.username);
+
+        $scope.nowPlaying = function (value) {
+            console.log("value:", value);
+        };
+
+
+
     });
