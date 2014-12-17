@@ -1,4 +1,4 @@
-angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ])
+angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 'youtube-embed' ])
     .constant('FIREBASE_URI', 'https://sync-player.firebaseio.com')
     .config(function ($routeProvider) {
         $routeProvider
@@ -45,6 +45,15 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
         $scope.nowPlaying = function (value) {
             console.log("value:", value);
         };
+
+        $scope.playingVideo = "iWG3zbko3p4";
+
+        $scope.newVideo = function (link) {
+            $scope.playingVideo = link;
+//            $scope.mainPlayer.playVideo()
+        }
+
+
 
 
 

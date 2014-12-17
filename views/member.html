@@ -4,11 +4,14 @@
 
 <md-content layout="row" layout-align="center center">
     <h2>Play On: {{playingDevice.$value}}</h2>
+
     <form ng-submit="playOn(playDevice)">
 
         <md-content class="radio-wrapper">
             <md-radio-group class="itemradio" ng-model="playDevice">
-                <md-radio-button ng-repeat="device in deviceArray" value="{{device.name}}" aria-label="{{ device.name }}">{{device.name}}</md-radio-button>
+                <md-radio-button ng-repeat="device in deviceArray" value="{{device.name}}"
+                                 aria-label="{{ device.name }}">{{device.name}}
+                </md-radio-button>
                 <!--<md-radio-button value="d2">d2</md-radio-button>-->
             </md-radio-group>
 
@@ -19,7 +22,19 @@
 </md-content>
 
 
-<md-content>
-    <h2 ng-show="playingDevice.$value == '{{agent}}'">DEVICE PLAYING: </h2>
+<md-content layout="row" layout-align="center center" ng-show="playingDevice.$value == '{{agent}}'">
+    <youtube-video player="mainPlayer" video-id="playingVideo"></youtube-video>
 </md-content>
+
+<md-content layout="row" layout-align="center center">
+    <form style="padding: 20px;" ng-submit="newVideo(videoLink)">
+        <div>
+            <md-text-float label="videoLink" ng-model="videoLink" required> </md-text-float>
+            <md-button type="submit" class="md-raised md-primary" ng-click="mainPlayer.playVideo()">Play</md-button>
+        </div>
+
+    </form>
+</md-content>
+
+
 
