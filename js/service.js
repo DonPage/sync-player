@@ -60,9 +60,32 @@ angular.module("sync-player")
 
         this.getNowPlaying = function (user) {
 //            var nowPlaying = membersSync.$child(user).$child("nowPlaying");
-            console.log(navigator.platform, $scope.playingDevice.$value);
-
             return console.log("nowplaying");
+        };
+
+        this.sendAction = function(action, user) {
+            var userRef = membersRef.child(user);
+            userRef.update({
+                action: action
+            })
+        };
+
+        this.syncAction = function (user) {
+            var actionRef = membersSync.$child(user).$child("action");
+            return actionRef;
+        };
+
+        this.syncVideo = function (user) {
+            var actionRef = membersSync.$child(user).$child("nowPlaying");
+            return actionRef;
+        };
+
+        this.updateVideo = function(link, user){
+            console.log("updateVideo()", link);
+            var userVideoRef = membersRef.child(user);
+            userVideoRef.update({
+                nowPlaying: link
+            })
         }
 
         function addFirebaseDevice(device, member){

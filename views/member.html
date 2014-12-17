@@ -23,14 +23,16 @@
 
 
 <md-content layout="row" layout-align="center center" ng-show="playingDevice.$value == '{{agent}}'">
-    <youtube-video player="mainPlayer" video-id="playingVideo"></youtube-video>
+    <youtube-video player="mainPlayer" player-vars="playerVar" video-id="playingVideo.$value"></youtube-video>
 </md-content>
 
 <md-content layout="row" layout-align="center center">
     <form style="padding: 20px;" ng-submit="newVideo(videoLink)">
         <div>
             <md-text-float label="videoLink" ng-model="videoLink" required> </md-text-float>
-            <md-button type="submit" class="md-raised md-primary" ng-click="mainPlayer.playVideo()">Play</md-button>
+            <md-button class="md-raised md-primary" ng-click="action('play')">Play</md-button>
+            <md-button class="md-raised md-primary" ng-click="action('pause')">Pause</md-button>
+
         </div>
 
     </form>
