@@ -8,7 +8,7 @@
 
         <md-content class="radio-wrapper">
             <md-radio-group class="itemradio" ng-model="playDevice">
-                <md-radio-button ng-repeat="device in deviceArray track by $index">{{device.name}}</md-radio-button>
+                <md-radio-button ng-repeat="device in deviceArray track by $index" value="{{device.name}}">{{device.name}}</md-radio-button>
                 <!--<md-radio-button value="d2">d2</md-radio-button>-->
             </md-radio-group>
 
