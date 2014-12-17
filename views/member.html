@@ -1,0 +1,24 @@
+<md-content md-theme="indigo" layout="row" layout-align="center center">
+    <h1>Hello {{agent}}</h1>
+</md-content>
+
+<md-content layout="row" layout-align="center center">
+    <h2>Play On: {{playingDevice.$value}}</h2>
+    <form ng-submit="playOn(playDevice)">
+
+        <md-content class="radio-wrapper">
+            <md-radio-group class="itemradio" ng-model="playDevice">
+                <md-radio-button value="d1" aria-label="Label 1">d1</md-radio-button>
+                <md-radio-button value="d2">d2</md-radio-button>
+            </md-radio-group>
+
+        </md-content>
+        <md-button class="md-raised" type="submit">Okay</md-button>
+
+    </form>
+</md-content>
+
+        <md-content>
+
+        </md-content>
+

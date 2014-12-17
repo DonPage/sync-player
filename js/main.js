@@ -6,6 +6,10 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
                 controller: "homeController",
                 templateUrl: "views/home.html"
             })
+            .when("/member/:username", {
+                controller: "memberController",
+                templateUrl: "views/member.html"
+            })
             .otherwise({
                 redirectTo: "/"
             })
@@ -16,14 +20,24 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
 
         $scope.login = function (username) {
             console.log(username);
-            if(!username){
+            if (!username) {
                 return;
             } else {
-                
+                appService.enterSession(username);
             }
-
-
         }
+    })
+
+    .controller("memberController", function ($scope, appService, $routeParams) {
+        $scope.agent = navigator.platform;
+        appService.savingDeviceLS(navigator.platform, $routeParams.username);
+
+        $scope.playOn = function (device) {
+            console.log(device);
+            appService.setPlayingDevice(device, $routeParams.username);
+        };
 
 
+
+        $scope.playingDevice = appService.getPlayingDevice($routeParams.username);
     });
