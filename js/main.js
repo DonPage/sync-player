@@ -37,7 +37,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase' ]
             appService.setPlayingDevice(device, $routeParams.username);
         };
 
-
-
         $scope.playingDevice = appService.getPlayingDevice($routeParams.username);
+
+        $scope.deviceArray = appService.getDevices($routeParams.username);
     });

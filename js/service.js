@@ -52,10 +52,17 @@ angular.module("sync-player")
             })
         };
 
+        this.getDevices = function (user) {
+            var devices = membersSync.$child(user).$child("devices");
+            console.log(devices);
+            return devices;
+        };
+
         function addFirebaseDevice(device, member){
             var userDevicesRef = membersRef.child(member).child("devices");
-            userDevicesRef.set({
-                device: device
+            userDevicesRef.child(device).set({
+                name: device,
+                status: ""
             })
 
         }
