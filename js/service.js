@@ -58,13 +58,14 @@ angular.module("sync-player")
             return devices;
         };
 
-        this.getNowPlaying = function (user) {
+//        this.getNowPlaying = function (user) {
 //            var nowPlaying = membersSync.$child(user).$child("nowPlaying");
-            return console.log("nowplaying");
-        };
+//            return console.log("nowplaying");
+//        };
 
         this.sendAction = function(action, user) {
             var userRef = membersRef.child(user);
+            console.log("sendAction");
             userRef.update({
                 action: action
             })
@@ -86,7 +87,7 @@ angular.module("sync-player")
             userVideoRef.update({
                 nowPlaying: link
             })
-        }
+        };
 
         function addFirebaseDevice(device, member){
             var userDevicesRef = membersRef.child(member).child("devices");

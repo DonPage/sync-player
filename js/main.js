@@ -46,16 +46,15 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
             console.log("value:", value);
         };
 
+        //this sync the video link
         $scope.playingVideo = appService.syncVideo($routeParams.username);
 
         $scope.playerVar = {
-            autoplay: 1
+            autoplay: 1 //auto play video = true;
         };
 
-        var action = $scope.currentAction;
 
-
-        $scope.newVideo = function (link) { //updates video link so new video can be played.
+        $scope.newVideo = function (link) { //updates video link to the database.
             appService.updateVideo(link, $routeParams.username);
         };
 
@@ -64,20 +63,21 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         $scope.action = function (action) {
             appService.sendAction(action, $routeParams.username);
+            updateState();
+        };
 
-            console.log("currentAction", $scope.currentAction.$value);
-            if ($scope.currentAction.$value == 'play'){
+        function updateState() {
+            console.log("updateState");
+
+            if ($scope.currentAction.$value == 'play') {
                 console.log("PLAY");
                 $scope.mainPlayer.playVideo();
             } else {
                 console.log("ELSE PAUSE");
                 $scope.mainPlayer.stopVideo();
             }
-        };
 
-
-
-
+        }
 
 
     });
