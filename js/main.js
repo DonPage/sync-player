@@ -28,7 +28,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         }
     })
 
-    .controller("memberController", function ($scope, appService, $routeParams) {
+    .controller("memberController", function ($scope, appService, $routeParams, youtubeEmbedUtils) {
         var nowPlayingdevice = "";
         $scope.agent = navigator.platform;
         appService.savingDeviceLS(navigator.platform, $routeParams.username);
@@ -50,36 +50,57 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         $scope.playingVideo = appService.syncVideo($routeParams.username);
 
         $scope.playerVar = {
-            autoplay: 1 //auto play video = true;
+            autoplay: 1, //auto play video = true;
+            events: {
+                'onStateChange': updateState
+            }
         };
 
 
         $scope.newVideo = function (link) { //updates video link to the database.
-            appService.updateVideo(link, $routeParams.username);
+            var getID = youtubeEmbedUtils.getIdFromURL(link);
+
+            appService.updateVideo(getID, $routeParams.username);
         };
 
         $scope.currentAction = appService.syncAction($routeParams.username);
 
-
         $scope.action = function (action) {
+            console.log("player:", player);
             appService.sendAction(action, $routeParams.username);
-            updateState();
+//            updateState();
+            if (action == 'play'){
+                $scope.playerVar.playVideo();
+            } else {
+                $scope.playerVar.pauseVideo();
+            }
         };
 
-        function updateState() {
-            console.log("updateState");
+        function updateState(event) {
+            console.log("updateState", event);
 
-            if ($scope.currentAction.$value == 'play') {
-                console.log("PLAY");
-                $scope.mainPlayer.playVideo();
-            } else {
-                console.log("ELSE PAUSE");
-                $scope.mainPlayer.stopVideo();
-            }
 
+
+//            $scope.$on("youtube.player.playing", function($event, player){
+//                console.log("youtube.player.playing");
+//
+//                if ($scope.currentAction.$value == 'play') {
+//                    console.log("PLAY");
+//                    player.playVideo();
+//                } else {
+//                    console.log("ELSE PAUSE");
+//                    player.stopVideo();
+//                }
+//            });
+
+//            if ($scope.currentAction.$value == 'play') {
+//                console.log("PLAY");
+//                $scope.mainPlayer.playVideo();
+//            } else {
+//                console.log("ELSE PAUSE");
+//                $scope.mainPlayer.stopVideo();
+//            }
         }
-
-
 
 
     });

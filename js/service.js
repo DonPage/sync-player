@@ -73,6 +73,7 @@ angular.module("sync-player")
 
         this.syncAction = function (user) {
             var actionRef = membersSync.$child(user).$child("action");
+
             return actionRef;
         };
 
