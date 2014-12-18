@@ -22,8 +22,13 @@
 </md-content>
 
 
-<md-content layout="row" layout-align="center center" ng-show="playingDevice.$value == '{{agent}}'">
-    <youtube-video player="mainPlayer" player-vars="playerVar" video-id="playingVideo.$value"></youtube-video>
+<md-content id="mainVideoWrapper" layout="row" layout-align="center center" ng-switch on="playingDevice.$value == '{{agent}}'">
+    <div ng-switch-default>
+        playing on different device
+    </div>
+    <div ng-switch-when="true">
+        <youtube-video player="mainPlayer" player-vars="playerVar" video-id="playingVideo.$value"></youtube-video>
+    </div>
 </md-content>
         {{currentAction.$value}}
 
@@ -32,8 +37,6 @@
         <div>
             <md-text-float label="videoLink" ng-model="videoLink" required> </md-text-float>
             <md-button class="md-raised md-primary" type="submit">submit</md-button>
-
-
         </div>
 
     </form>
