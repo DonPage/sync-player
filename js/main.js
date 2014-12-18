@@ -79,7 +79,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         }
 
-        
+
 
 
     });
