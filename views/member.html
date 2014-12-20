@@ -49,9 +49,9 @@
     <md-content layout="column" layout-fill md-theme="indigo">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <form md-theme="light-blue-dark" class="search-wrapper" ng-submit="searchYoutube(searchQ)">
-                    <md-text-float label="search" ng-model="searchQ" type="search"></md-text-float>
-                    <!--<md-button type="submit">submit</md-button>-->
+                <form layout="row" md-theme="light-blue-dark" class="search-wrapper" ng-submit="searchYoutube(searchQ)">
+                    <md-text-float flex="33" label="search" ng-model="searchQ" type="search"></md-text-float>
+                    <md-button flex="77" style="top:30; right:0; position: absolute;" type="submit">submit</md-button>
                 </form>
 
             </div>
