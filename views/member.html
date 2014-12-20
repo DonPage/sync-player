@@ -62,13 +62,14 @@
         <md-content>
             <md-content class="results-wrapper">
                 <section>
-                    <md-subheader layout="row" md-theme="indigo" class="md-primary">
+                    <md-subheader layout="row" class="md-primary">
                         <div>results</div>
                     </md-subheader>
                     <md-list layout="column">
                         <md-item class="result-item" ng-repeat="result in resultArray">
-                            <md-item-content>
-
+                            <md-item-content ng-click="newVideo(result.id.videoId)">
+                                <img ng-src="{{result.snippet.thumbnails.default.url}}"/>
+                                <h3 layout-align="center">{{result.snippet.title}}</h3>
 
                             </md-item-content>
                         </md-item>

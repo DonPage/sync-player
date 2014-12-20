@@ -105,21 +105,26 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
     })
 
     .controller("searchController", function ($scope, appService, $routeParams, $http) {
+        var resultsArray = [];
+        $scope.resultArray = "";
         console.log("searchController", $routeParams.username);
 
         $scope.searchYoutube = function (q) {
             console.log("search youtube:", q);
 
-            $http.jsonp("https://www.googleapis.com/youtube/v3/videos?q="+ q +"" +
-                "&key=AIzaSyAOs-x4CHR-D4ohbrNImXJIvCBCGYiXH6s" +
-                "?callback=JSON_CALLBACK")
+            $http.get("https://www.googleapis.com/youtube/v3/search" +
+                "?part=snippet" +
+                "&q="+ q +"" +
+                "&maxResults=50"+
+                "&key=AIzaSyAOs-x4CHR-D4ohbrNImXJIvCBCGYiXH6s")
                 .success(function(data){
-                    console.log("YT DATA:", data);
+                    $scope.resultArray = data.items;
+                    console.log("RESULTS array",$scope.resultArray);
+
                 })
                 .error(function(data){
                     console.log("YT ERROR:", data);
-                })
-
+                });
         }
 
 
