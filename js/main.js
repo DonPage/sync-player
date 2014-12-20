@@ -69,7 +69,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
             console.log("player:", player);
             appService.sendAction(action, $routeParams.username);
 //            updateState();
-            if (action == 'play'){
+            if (action == 'play') {
                 $scope.playerVar.playVideo();
             } else {
                 $scope.playerVar.pauseVideo();
@@ -78,7 +78,6 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         function updateState(event) {
             console.log("updateState", event);
-
 
 
 //            $scope.$on("youtube.player.playing", function($event, player){
@@ -100,6 +99,27 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 //                console.log("ELSE PAUSE");
 //                $scope.mainPlayer.stopVideo();
 //            }
+        }
+
+
+    })
+
+    .controller("searchController", function ($scope, appService, $routeParams, $http) {
+        console.log("searchController", $routeParams.username);
+
+        $scope.searchYoutube = function (q) {
+            console.log("search youtube:", q);
+
+            $http.jsonp("https://www.googleapis.com/youtube/v3/videos?q="+ q +"" +
+                "&key=AIzaSyAOs-x4CHR-D4ohbrNImXJIvCBCGYiXH6s" +
+                "?callback=JSON_CALLBACK")
+                .success(function(data){
+                    console.log("YT DATA:", data);
+                })
+                .error(function(data){
+                    console.log("YT ERROR:", data);
+                })
+
         }
 
 
