@@ -58,7 +58,7 @@
                     <md-list layout="column">
                         <md-item class="result-item" ng-repeat="result in resultArray">
                             <md-item-content>
-                                <img ng-src="{{result.snippet.thumbnails.default.url}}"/>
+                                <img ng-src="{{result.snippet.thumbnails.default.url}}" ng-click="newVideo(result.id.videoId)"/>
                                 <p layout-align="center">{{result.snippet.title}}</p>
                                 <md-button ng-click="addToPlaylist(result.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>
 
