@@ -32,17 +32,7 @@
 </md-content>
         {{currentAction.$value}}
 
-<md-content layout="row" layout-align="center center">
-    <form style="padding: 20px;" ng-submit="newVideo(videoLink)">
-        <div>
-            <md-text-float label="videoLink" ng-model="videoLink" required> </md-text-float>
-            <md-button class="md-raised md-primary" type="submit">submit</md-button>
-        </div>
 
-    </form>
-    <!--<md-button class="md-raised md-primary" ng-click="action('play')">Play</md-button>-->
-    <!--<md-button class="md-raised md-primary" ng-click="action('pause')">Pause</md-button>-->
-</md-content>
 
 <div ng-controller="searchController" layout="horizontal" layout-fill class="md-whiteframe-z1" style="max-width:960px; margin: 50px auto; max-height: 400px;">
 
@@ -67,9 +57,10 @@
                     </md-subheader>
                     <md-list layout="column">
                         <md-item class="result-item" ng-repeat="result in resultArray">
-                            <md-item-content ng-click="newVideo(result.id.videoId)">
+                            <md-item-content>
                                 <img ng-src="{{result.snippet.thumbnails.default.url}}"/>
-                                <h3 layout-align="center">{{result.snippet.title}}</h3>
+                                <p layout-align="center">{{result.snippet.title}}</p>
+                                <md-button ng-click="addToPlaylist(result.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>
 
                             </md-item-content>
                         </md-item>

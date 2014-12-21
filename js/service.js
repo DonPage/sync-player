@@ -73,7 +73,6 @@ angular.module("sync-player")
 
         this.syncAction = function (user) {
             var actionRef = membersSync.$child(user).$child("action");
-
             return actionRef;
         };
 
@@ -96,7 +95,13 @@ angular.module("sync-player")
                 name: device,
                 status: ""
             })
+        }
 
+        this.addToPlaylist = function (img, title, id, user) {
+            var playListRef = membersRef.child(user).child("playlist");
+            playListRef.push({
+                thumb: img, title: title, id: id
+            })
         }
 
     }]);
