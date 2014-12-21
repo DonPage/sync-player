@@ -104,8 +104,15 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         $scope.addToPlaylist = function (img, title, id) {
             console.log(img, title, id);
-            appService.addToPlaylist(img, title, id, $routeParams.username)
-        }
+            appService.addToPlaylist(img, title, id, $routeParams.username);
+
+        };
+
+        $scope.$on('youtube.player.ended', function ($event, player) {
+            // play it again
+            appService.nextSong($routeParams.username);
+//            player.playVideo();
+        });
 
 
     })

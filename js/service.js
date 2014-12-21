@@ -102,6 +102,38 @@ angular.module("sync-player")
             playListRef.push({
                 thumb: img, title: title, id: id
             })
+        };
+
+        this.nextSong = function (user) {
+            console.log("NEXT SONG!");
+            var userVideoRef = membersRef.child(user);
+            var playlistRef = membersRef.child(user).child("playlist");
+
+            playlistRef.once("value", function(dataSnapshot){
+                console.log(dataSnapshot.val());
+                var songs = dataSnapshot.val();
+                for (var keys in songs) {
+                    if (songs.hasOwnProperty(keys)) {
+                        userVideoRef.update({
+                            nowPlaying: songs[keys].id
+                        });
+                        console.log("firstSong key:", keys);
+                        //deletes the random (push) id gernerated for the song.
+                        var firstSongRef = membersRef.child(user).child("playlist").child(keys);
+                        //pushes first song to the end of playlist
+                        playlistRef.push({
+                            id: songs[keys].id, thumb: songs[keys].thumb, title: songs[keys].title
+                        });
+                        //remove the song from the front of playlist
+                        firstSongRef.remove();
+                        //return out of .once so it only does this operation on the first song in playlist
+                        return console.log(songs[keys].id);
+                    }
+                }
+            })
+
+
+
         }
 
     }]);
