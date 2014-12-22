@@ -131,7 +131,11 @@ angular.module("sync-player")
                     }
                 }
             })
+        };
 
+        this.syncSongArray = function (user) {
+            var syncPlaylist = membersSync.$child(user).$child("playlist");
+            return syncPlaylist;
 
 
         }

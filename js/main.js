@@ -113,8 +113,6 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
             appService.nextSong($routeParams.username);
 //            player.playVideo();
         });
-
-
     })
 
     .controller("searchController", function ($scope, appService, $routeParams, $http) {
@@ -139,4 +137,8 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
                     console.log("YT ERROR:", data);
                 });
         }
+    })
+
+    .controller("playlistController", function($scope, appService, $routeParams){
+        $scope.songArray = appService.syncSongArray($routeParams.username);
     });

@@ -5,3 +5,13 @@
   */
 @import url(../bower_components/angular-material/angular-material.css);
 @import url(../bower_components/angular-material/themes/indigo-theme.css);
+
+
+
+.shop-wrapper--outer {
+    width: 100%;
+    max-width: 960px;
+    margin: 20px auto; }
+
+.shop-wrapper {
+    height: 500px; }

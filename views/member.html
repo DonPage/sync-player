@@ -34,42 +34,87 @@
 
 
 
-<div ng-controller="searchController" layout="horizontal" layout-fill class="md-whiteframe-z1" style="max-width:960px; margin: 50px auto; max-height: 400px;">
 
-    <md-content layout="column" layout-fill md-theme="indigo">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <form layout="row" md-theme="light-blue-dark" class="search-wrapper" ng-submit="searchYoutube(searchQ)">
-                    <md-text-float flex="33" label="search" ng-model="searchQ" type="search"></md-text-float>
-                    <md-button flex="77" style="top:30; right:0; position: absolute;" type="submit">submit</md-button>
-                </form>
+    <md-content ng-controller="searchController" layout="column" layout-fill md-theme="indigo">
+        <div layout="horizontal" layout-fill class="shop-wrapper--outer md-whiteframe-z1">
 
-            </div>
+            <md-content layout="column" layout-fill md-theme="indigo">
+                <md-toolbar md-theme="indigo">
+                    <div class="md-toolbar-tools">
+                        <form layout="row" md-theme="light-blue-dark" class="search-wrapper" ng-submit="searchYoutube(searchQ)">
+                            <md-text-float flex="33" label="search" ng-model="searchQ" type="search"></md-text-float>
+                            <md-button flex="77" style="top:30; right:0; position: absolute;" type="submit">submit</md-button>
+                        </form>
+                    </div>
+                </md-toolbar>
 
-        </md-toolbar>
+                <md-content>
+                    <md-content class="shop-wrapper">
+                        <section>
+                            <md-subheader layout="row" md-theme="indigo" class="md-primary">
+                                <div>results</div>
+                            </md-subheader>
+                            <md-list layout="column">
+                                <md-item class="result-item" ng-repeat="result in resultArray">
+                                    <md-item-content>
+
+                                        <md-item-content>
+                                            <img ng-src="{{result.snippet.thumbnails.default.url}}" ng-click="newVideo(result.id.videoId)"/>
+                                            <a href="" ng-click="newVideo(result.id.videoId)" layout-align="center">{{result.snippet.title}}</a>
+                                            <md-button ng-click="addToPlaylist(result.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>
+                                        </md-item-content>
+
+                                    </md-item-content>
+                                </md-item>
+                            </md-list>
+                        </section>
 
 
-        <md-content>
-            <md-content class="results-wrapper">
-                <section>
-                    <md-subheader layout="row" class="md-primary">
-                        <div>results</div>
-                    </md-subheader>
-                    <md-list layout="column">
-                        <md-item class="result-item" ng-repeat="result in resultArray">
-                            <md-item-content>
-                                <img ng-src="{{result.snippet.thumbnails.default.url}}" ng-click="newVideo(result.id.videoId)"/>
-                                <a href="" ng-click="newVideo(result.id.videoId)" layout-align="center">{{result.snippet.title}}</a>
-                                <md-button ng-click="addToPlaylist(result.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>
+                    </md-content>
+                </md-content>
+            </md-content>
+        </div>
 
-                            </md-item-content>
-                        </md-item>
-                    </md-list>
-                </section>
+    </md-content>
+
+<md-content ng-controller="playlistController" layout="column" layout-fill md-theme="indigo">
+    <div layout="horizontal" layout-fill class="shop-wrapper--outer md-whiteframe-z1">
+
+        <md-content layout="column" layout-fill md-theme="indigo">
+            <md-toolbar md-theme="indigo">
+                <div class="md-toolbar-tools">
+
+                </div>
+            </md-toolbar>
+
+            <md-content>
+                <md-content class="shop-wrapper">
+                    <section>
+                        <md-subheader layout="row" md-theme="indigo" class="md-primary">
+                            <div>playlist</div>
+                        </md-subheader>
+                        <md-list layout="column">
+                            <md-item class="result-item" ng-repeat="song in songArray">
+                                <md-item-content>
+
+                                    <md-item-content>
+                                        <img ng-src="{{song.thumb}}" ng-click="newVideo(result.id.videoId)"/>
+                                        <a href="" ng-click="newVideo(song.id)" layout-align="center">{{song.title}}</a>
+                                        <!--<md-button ng-click="addToPlaylist(song.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>-->
+                                    </md-item-content>
+
+                                </md-item-content>
+                            </md-item>
+                        </md-list>
+                    </section>
+
+
+                </md-content>
             </md-content>
         </md-content>
-    </md-content>
-</div>
+    </div>
+
+</md-content>
 
 
 
