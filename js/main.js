@@ -29,7 +29,13 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
     })
 
     .controller("memberController", function ($scope, appService, $routeParams, youtubeEmbedUtils) {
-        var nowPlayingdevice = "";
+
+        $scope.syncPlayIndex = appService.syncIndex($routeParams.username);
+
+        $scope.songArray = appService.syncSongArray($routeParams.username);
+
+//        $scope.songArraySnap = appService.snapSongArray($routeParams.username);
+
         $scope.agent = navigator.platform;
         appService.savingDeviceLS(navigator.platform, $routeParams.username);
 
@@ -57,10 +63,13 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         };
 
 
-        $scope.newVideo = function (link) { //updates video link to the database.
+        $scope.newVideo = function (link, idx) { //updates video link to the database.
+
+            console.log("newVideo()",link, idx);
+//            console.log("playlist:", $scope.songArraySnap);
             var getID = youtubeEmbedUtils.getIdFromURL(link);
 
-            appService.updateVideo(getID, $routeParams.username);
+            appService.updateVideo(getID, $routeParams.username, idx);
         };
 
         $scope.currentAction = appService.syncAction($routeParams.username);
@@ -111,8 +120,11 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         $scope.$on('youtube.player.ended', function ($event, player) {
             // play it again
             appService.nextSong($routeParams.username);
+
 //            player.playVideo();
         });
+
+
     })
 
     .controller("searchController", function ($scope, appService, $routeParams, $http) {
@@ -139,6 +151,3 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         }
     })
 
-    .controller("playlistController", function($scope, appService, $routeParams){
-        $scope.songArray = appService.syncSongArray($routeParams.username);
-    });

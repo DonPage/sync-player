@@ -3,7 +3,7 @@ angular.module("sync-player")
 
         var ref = new Firebase(FIREBASE_URI);
         var membersRef = ref.child("users");
-        var membersSync = $firebase(ref).$child('users');
+        var membersSync = $firebase(ref).child('users');
 
 
         this.enterSession = function (name) {
@@ -42,7 +42,7 @@ angular.module("sync-player")
 
         this.getPlayingDevice = function (user) {
             console.log("getPlayingDevice()");
-            var playingDeviceRef = membersSync.$child(user).$child("playingDevice");
+            var playingDeviceRef = membersSync.child(user).child("playingDevice");
             return playingDeviceRef;
         };
 
@@ -54,12 +54,12 @@ angular.module("sync-player")
         };
 
         this.getDevices = function (user) {
-            var devices = membersSync.$child(user).$child("devices");
+            var devices = membersSync.child(user).child("devices");
             return devices;
         };
 
 //        this.getNowPlaying = function (user) {
-//            var nowPlaying = membersSync.$child(user).$child("nowPlaying");
+//            var nowPlaying = membersSync.child(user).child("nowPlaying");
 //            return console.log("nowplaying");
 //        };
 
@@ -72,20 +72,24 @@ angular.module("sync-player")
         };
 
         this.syncAction = function (user) {
-            var actionRef = membersSync.$child(user).$child("action");
+            var actionRef = membersSync.child(user).child("action");
             return actionRef;
         };
 
         this.syncVideo = function (user) {
-            var actionRef = membersSync.$child(user).$child("nowPlaying");
-            return actionRef;
+            return membersSync.child(user).child("nowPlaying");
         };
 
-        this.updateVideo = function(link, user){
+        this.syncIndex = function (user) {
+            return membersSync.child(user).child("currentIndex");
+        };
+
+        this.updateVideo = function(link, user, idx){
             console.log("updateVideo()", link);
             var userVideoRef = membersRef.child(user);
             userVideoRef.update({
-                nowPlaying: link
+                nowPlaying: link,
+                currentIndex: idx
             })
         };
 
@@ -134,9 +138,15 @@ angular.module("sync-player")
         };
 
         this.syncSongArray = function (user) {
-            var syncPlaylist = membersSync.$child(user).$child("playlist");
-            return syncPlaylist;
+            return membersSync.child(user).child("playlist")
+        };
 
+        this.songArraySnap = function (user) {
+            var songs = membersSync(user).child("playlist");
+
+            var list = songs;
+
+            return list;
 
         }
 
