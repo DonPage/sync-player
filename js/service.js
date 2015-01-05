@@ -2,13 +2,13 @@ angular.module("sync-player")
     .service("appService",  ['$firebase', 'FIREBASE_URI', function ($firebase, FIREBASE_URI) {
 
         var ref = new Firebase(FIREBASE_URI);
-        var membersRef = ref.child("users");
-        var membersSync = $firebase(ref).child('users');
+//        var membersRef = ref.child("users");
+//        var membersSync = $firebase(ref.child('users')).$asObject();
 
 
         this.enterSession = function (name) {
             console.log("enterSession");
-            var userRef = membersRef.child(name);
+            var userRef = $firebase(ref.child(name));
             userRef.once("value", function (snapshot) {
                 //gets user data
 
@@ -42,19 +42,19 @@ angular.module("sync-player")
 
         this.getPlayingDevice = function (user) {
             console.log("getPlayingDevice()");
-            var playingDeviceRef = membersSync.child(user).child("playingDevice");
+            var playingDeviceRef = $firebase(ref.child('users').child(user).child("playingDevice"));
             return playingDeviceRef;
         };
 
         this.setPlayingDevice = function (device, user) {
-            var userRef = membersRef.child(user);
+            var userRef = $firebase(ref.child(user));
             userRef.update({
                 playingDevice: device
             })
         };
 
         this.getDevices = function (user) {
-            var devices = membersSync.child(user).child("devices");
+            var devices = $firebase(ref.child(user).child("devices"));
             return devices;
         };
 
@@ -64,7 +64,7 @@ angular.module("sync-player")
 //        };
 
         this.sendAction = function(action, user) {
-            var userRef = membersRef.child(user);
+            var userRef = $firebase(ref.child(user));
             console.log("sendAction");
             userRef.update({
                 action: action
@@ -72,21 +72,21 @@ angular.module("sync-player")
         };
 
         this.syncAction = function (user) {
-            var actionRef = membersSync.child(user).child("action");
+            var actionRef = $firebase(ref.child(user).child("action"));
             return actionRef;
         };
 
         this.syncVideo = function (user) {
-            return membersSync.child(user).child("nowPlaying");
+            return $firebase(ref.child(user).child("nowPlaying"));
         };
 
         this.syncIndex = function (user) {
-            return membersSync.child(user).child("currentIndex");
+            return $firebase(ref.child(user).child("currentIndex"));
         };
 
         this.updateVideo = function(link, user, idx){
             console.log("updateVideo()", link);
-            var userVideoRef = membersRef.child(user);
+            var userVideoRef = $firebase(ref.child(user));
             userVideoRef.update({
                 nowPlaying: link,
                 currentIndex: idx
@@ -94,15 +94,15 @@ angular.module("sync-player")
         };
 
         function addFirebaseDevice(device, member){
-            var userDevicesRef = membersRef.child(member).child("devices");
-            userDevicesRef.child(device).set({
+            var userDevicesRef = $firebase(ref.child(member).child("devices").child(device));
+            userDevicesRef.update({
                 name: device,
                 status: ""
             })
         }
 
         this.addToPlaylist = function (img, title, id, user) {
-            var playListRef = membersRef.child(user).child("playlist");
+            var playListRef = $firebase(ref.child(user).child("playlist"));
             playListRef.push({
                 thumb: img, title: title, id: id
             })
@@ -110,8 +110,8 @@ angular.module("sync-player")
 
         this.nextSong = function (user) {
             console.log("NEXT SONG!");
-            var userVideoRef = membersRef.child(user);
-            var playlistRef = membersRef.child(user).child("playlist");
+            var userVideoRef = $firebase(ref.child(user));
+            var playlistRef = $firebase(ref.child(user).child("playlist"));
 
             playlistRef.once("value", function(dataSnapshot){
                 console.log(dataSnapshot.val());
@@ -138,11 +138,11 @@ angular.module("sync-player")
         };
 
         this.syncSongArray = function (user) {
-            return membersSync.child(user).child("playlist")
+            return $firebase(ref.child(user).child("playlist"))
         };
 
         this.songArraySnap = function (user) {
-            var songs = membersSync(user).child("playlist");
+            var songs = $firebase(ref.child(user).child("playlist"));
 
             var list = songs;
 

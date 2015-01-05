@@ -1,8 +1,9 @@
 <md-content md-theme="indigo" layout="row" layout-align="center center">
-    <form style="padding: 20px;" ng-submit="login(username)">
+    <form style="padding: 20px;" ng-submit="createRoom(roomName, username)">
         <div>
+            <md-text-float label="Room Name" ng-model="roomName" required> </md-text-float>
             <md-text-float label="Username" ng-model="username" required> </md-text-float>
-            <md-button type="submit" class="md-raised md-primary">Login</md-button>
+            <md-button type="submit" class="md-raised md-primary">Create Room</md-button>
         </div>
 
     </form>

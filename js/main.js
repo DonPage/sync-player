@@ -6,9 +6,9 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
                 controller: "homeController",
                 templateUrl: "views/home.html"
             })
-            .when("/member/:username", {
-                controller: "memberController",
-                templateUrl: "views/member.html"
+            .when("/room/:roomname", {
+                controller: "roomController",
+                templateUrl: "views/room.html"
             })
             .otherwise({
                 redirectTo: "/"
@@ -16,44 +16,72 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
     })
 
 
-    .controller("homeController", function ($scope, appService) {
+    .controller("homeController", function ($scope, $firebase) {
 
-        $scope.login = function (username) {
-            console.log(username);
-            if (!username) {
+        var ref = new Firebase("https://sync-player.firebaseio.com/rooms");
+        var fb = $firebase(ref);
+
+        var syncObj = fb.$asObject();
+        var list = fb.$asArray();
+
+        $scope.createRoom = function(room, user){
+            console.log(room);
+
+            if(!room){
                 return;
-            } else {
-                appService.enterSession(username);
+            }//else
+
+            console.log(syncObj);
+            console.log(list);
+
+            var rec = list.$getRecord(room);
+            console.log("rec:",rec);
+            if(rec === null){
+                fb.$set(room, {
+                    currentIndex: 0,
+                    currentPlayList: "none",
+                    devices: "", //user device will be pushed in once the user loads next window.
+                    roomCreated: Firebase.ServerValue.TIMESTAMP,
+                    roomCreator: user,
+                    playlist: "",
+                    nowPlaying: "",
+                    playingDevice: ""
+                });
+                window.location.hash = "#/room/"+room;
+                return console.log("room created!");
             }
+
         }
     })
 
-    .controller("memberController", function ($scope, appService, $routeParams, youtubeEmbedUtils) {
+    //This controller is old code from firebase 0.6.0. $child was removed in newest versions,
+    //going to have to approach this a different way.
+    .controller("memberControllerOLDCODE", function ($scope, appService, $routeParams, youtubeEmbedUtils) {
 
-        $scope.syncPlayIndex = appService.syncIndex($routeParams.username);
+        $scope.syncPlayIndex = appService.syncIndex($routeParams.roomname);
 
-        $scope.songArray = appService.syncSongArray($routeParams.username);
+        $scope.songArray = appService.syncSongArray($routeParams.roomname);
 
-//        $scope.songArraySnap = appService.snapSongArray($routeParams.username);
+//        $scope.songArraySnap = appService.snapSongArray($routeParams.roomname);
 
         $scope.agent = navigator.platform;
-        appService.savingDeviceLS(navigator.platform, $routeParams.username);
+        appService.savingDeviceLS(navigator.platform, $routeParams.roomname);
 
         $scope.playOn = function (device) {
             console.log(device);
-            appService.setPlayingDevice(device, $routeParams.username);
+            appService.setPlayingDevice(device, $routeParams.roomname);
         };
 
-        $scope.playingDevice = appService.getPlayingDevice($routeParams.username);
+        $scope.playingDevice = appService.getPlayingDevice($routeParams.roomname);
 
-        $scope.deviceArray = appService.getDevices($routeParams.username);
+        $scope.deviceArray = appService.getDevices($routeParams.roomname);
 
         $scope.nowPlaying = function (value) {
             console.log("value:", value);
         };
 
         //this sync the video link
-        $scope.playingVideo = appService.syncVideo($routeParams.username);
+        $scope.playingVideo = appService.syncVideo($routeParams.roomname);
 
         $scope.playerVar = {
             autoplay: 1, //auto play video = true;
@@ -69,14 +97,14 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 //            console.log("playlist:", $scope.songArraySnap);
             var getID = youtubeEmbedUtils.getIdFromURL(link);
 
-            appService.updateVideo(getID, $routeParams.username, idx);
+            appService.updateVideo(getID, $routeParams.roomname, idx);
         };
 
-        $scope.currentAction = appService.syncAction($routeParams.username);
+        $scope.currentAction = appService.syncAction($routeParams.roomname);
 
         $scope.action = function (action) {
             console.log("player:", player);
-            appService.sendAction(action, $routeParams.username);
+            appService.sendAction(action, $routeParams.roomname);
 //            updateState();
             if (action == 'play') {
                 $scope.playerVar.playVideo();
@@ -113,13 +141,13 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         $scope.addToPlaylist = function (img, title, id) {
             console.log(img, title, id);
-            appService.addToPlaylist(img, title, id, $routeParams.username);
+            appService.addToPlaylist(img, title, id, $routeParams.roomname);
 
         };
 
         $scope.$on('youtube.player.ended', function ($event, player) {
             // play it again
-            appService.nextSong($routeParams.username);
+            appService.nextSong($routeParams.roomname);
 
 //            player.playVideo();
         });
@@ -127,10 +155,41 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
     })
 
-    .controller("searchController", function ($scope, appService, $routeParams, $http) {
+    .controller("roomController", function($scope, $routeParams, youtubeEmbedUtils, $firebase){
+        console.log("roomname:", $routeParams.roomname);
+
+        //this just labels the current users device. Will be changed later once real account signup is working.
+        var agent = navigator.platform;
+        console.log("agent:", agent);
+
+        var ref = new Firebase("https://sync-player.firebaseio.com/rooms/"+$routeParams.roomname);
+        var devices = $firebase(ref.child("devices"));
+        var fb = $firebase(ref);
+
+        var syncObj = fb.$asObject();
+        syncObj.$bindTo($scope, "room");
+        console.log("syncObj", ref);
+
+
+//        console.log($firebase(devices).$asObject());
+        devices.$update(agent, {
+            name: agent,
+            onlineSince: Firebase.ServerValue.TIMESTAMP,
+            owner: "guest"//this will be dynamic once login is up.
+        });
+
+
+
+
+
+
+
+
+    })
+
+    .controller("searchController", function ($scope, $routeParams, $http) {
         var resultsArray = [];
         $scope.resultArray = "";
-        console.log("searchController", $routeParams.username);
 
         $scope.searchYoutube = function (q) {
             console.log("search youtube:", q);
@@ -149,5 +208,5 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
                     console.log("YT ERROR:", data);
                 });
         }
-    })
+    });
 
