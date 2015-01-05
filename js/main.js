@@ -39,11 +39,11 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
             if(rec === null){
                 fb.$set(room, {
                     currentIndex: 0,
-                    currentPlayList: "none",
+                    currentPlayList: "default",
                     devices: "", //user device will be pushed in once the user loads next window.
                     roomCreated: Firebase.ServerValue.TIMESTAMP,
                     roomCreator: user,
-                    playlist: "",
+                    playlist: "default",
                     nowPlaying: "",
                     playingDevice: ""
                 });
@@ -165,9 +165,27 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         var ref = new Firebase("https://sync-player.firebaseio.com/rooms/"+$routeParams.roomname);
         var devices = $firebase(ref.child("devices"));
+
+
+        //this vars/$scopes will only hold current playlist, this will be used when addings songs to the right playlist.
+        var syncCurrentPlaylist = null;
+        $scope.currentPlaylist = $firebase(ref.child("currentPlayList")).$asObject();
+        $scope.currentPlaylist.$loaded().then(function(data){
+            console.log("$scope.currentPlaylist:", data.$value);
+            syncCurrentPlaylist = data.$value;
+            $scope.playListArray = $firebase(ref.child("playlist").child(syncCurrentPlaylist)).$asArray();
+            $scope.playListArray.$loaded().then(function(data){
+                console.log("$scope.playListArray:", data[0]);
+                $scope.syncPlaylistArray = data;
+            })
+        });
+
+
+//        var playlist = $firebase(ref.child("playlist"));
         var fb = $firebase(ref);
 
         var syncObj = fb.$asObject();
+
         syncObj.$bindTo($scope, "room");
         console.log("syncObj", ref);
 
@@ -186,6 +204,25 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
                 playingDevice: device
             })
         };
+
+        //plays new video from search array
+        $scope.newVideo = function (vidLink, idx) {
+            var id = youtubeEmbedUtils.getIdFromURL(vidLink);
+            fb.$update({
+                nowPlaying: id,
+                currentIndex: idx
+            })
+        };
+
+        //this function adds song to currentPlaylist
+        $scope.addToPlaylist = function (playlist, img, title, id) {
+            var playlistRef = $firebase(ref.child("playlist").child(playlist));
+            console.log(playlist, title);
+            playlistRef.$push({
+                id: id, thumb: img, title: title
+            })
+        };
+
 
 
 

@@ -27,13 +27,9 @@
         playing on different device
     </div>
     <div ng-switch-when="true">
-        <youtube-video player="mainPlayer" player-vars="playerVar" video-id="playingVideo.$value"></youtube-video>
+        <youtube-video player="mainPlayer" player-vars="playerVar" video-id="room.nowPlaying"></youtube-video>
     </div>
 </md-content>
-        {{currentAction.$value}}
-
-
-
 
     <md-content ng-controller="searchController" layout="column" layout-fill md-theme="indigo">
         <div layout="horizontal" layout-fill class="shop-wrapper--outer md-whiteframe-z1">
@@ -61,7 +57,7 @@
                                         <md-item-content>
                                             <img ng-src="{{result.snippet.thumbnails.default.url}}" ng-click="newVideo(result.id.videoId)"/>
                                             <a href="" ng-click="newVideo(result.id.videoId)" layout-align="center">{{result.snippet.title}}</a>
-                                            <md-button ng-click="addToPlaylist(result.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>
+                                            <md-button ng-click="addToPlaylist(room.currentPlayList, result.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>
                                         </md-item-content>
 
                                     </md-item-content>
@@ -91,15 +87,15 @@
                 <md-content class="shop-wrapper">
                     <section>
                         <md-subheader layout="row" md-theme="indigo" class="md-primary">
-                            <div>playlist index: {{ syncPlayIndex.$value }}</div>
+                            <div>playlist: {{ room.currentPlayList }} ({{ room.currentIndex }})</div>
                         </md-subheader>
                         <md-list layout="column">
-                            <md-item class="result-item" ng-repeat="song in songArray track by $index">
+                            <md-item class="result-item" ng-repeat="song in syncPlaylistArray track by $index">
                                 <md-item-content>
 
                                     <md-item-content>
                                         <img ng-src="{{song.thumb}}" ng-click="newVideo(song.id, $index)"/>
-                                        <a href="" ng-click="newVideo(song.id, $index)" layout-align="center">{{song.title}}</a><span ng-show="(syncPlayIndex.$value == $index)">PLAYING</span>
+                                        <a href="" ng-click="newVideo(song.id, $index)" layout-align="center">{{ $index }} {{song.title}}</a><span ng-show="(room.currentIndex == $index)">PLAYING</span>
                                         <!--<md-button ng-click="addToPlaylist(song.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>-->
                                     </md-item-content>
 
