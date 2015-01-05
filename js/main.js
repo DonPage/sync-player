@@ -159,6 +159,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         console.log("roomname:", $routeParams.roomname);
 
         //this just labels the current users device. Will be changed later once real account signup is working.
+        $scope.agent = navigator.platform;
         var agent = navigator.platform;
         console.log("agent:", agent);
 
@@ -175,8 +176,18 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         devices.$update(agent, {
             name: agent,
             onlineSince: Firebase.ServerValue.TIMESTAMP,
-            owner: "guest"//this will be dynamic once login is up.
+            owner: "guest"//this will be dynamic once login is set up.
         });
+
+        //this function updates playingDevice
+        $scope.switchPlayDevice = function (device) {
+            console.log(device);
+            fb.$update({
+                playingDevice: device
+            })
+        };
+
+
 
 
 

@@ -3,9 +3,9 @@
 </md-content>
 
 <md-content layout="row" layout-align="center center">
-    <h2>Play On: {{playingDevice.$value}}</h2>
+    <h2>Play On: {{room.playingDevice}}</h2>
 
-    <form ng-submit="playOn(playDevice)">
+    <form ng-submit="switchPlayDevice(playDevice)">
 
         <md-content class="radio-wrapper">
             <md-radio-group class="itemradio" ng-model="playDevice">
@@ -22,7 +22,7 @@
 </md-content>
 
 
-<md-content id="mainVideoWrapper" layout="row" layout-align="center center" ng-switch on="playingDevice.$value == '{{agent}}'">
+<md-content id="mainVideoWrapper" layout="row" layout-align="center center" ng-switch on="room.playingDevice == '{{agent}}'">
     <div ng-switch-default>
         playing on different device
     </div>
