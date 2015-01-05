@@ -87,7 +87,7 @@
                 <md-content class="shop-wrapper">
                     <section>
                         <md-subheader layout="row" md-theme="indigo" class="md-primary">
-                            <div>playlist: {{ room.currentPlayList }} ({{ syncIndex }})</div>
+                            <div>playlist: {{ room.currentPlayList }} ({{ syncIndex + 1 }}/{{ syncPlaylistArray.length }})</div>
                         </md-subheader>
                         <md-list layout="column">
                             <md-item class="result-item" ng-repeat="song in syncPlaylistArray track by $index">
@@ -95,7 +95,7 @@
 
                                     <md-item-content>
                                         <img ng-src="{{song.thumb}}" ng-click="newVideo(song.id, $index)"/>
-                                        <a href="" ng-click="newVideo(song.id, $index)" layout-align="center">{{ $index }} {{song.title}}</a><span ng-show="(room.currentIndex == $index)">PLAYING</span>
+                                        <a href="" ng-click="newVideo(song.id, $index)" layout-align="center">{{ $index + 1 }} {{song.title}}</a><span ng-show="(room.currentIndex == $index)">PLAYING</span>
                                         <!--<md-button ng-click="addToPlaylist(song.snippet.thumbnails.default.url, result.snippet.title, result.id.videoId)">+</md-button>-->
                                     </md-item-content>
 

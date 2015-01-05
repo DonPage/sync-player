@@ -170,11 +170,13 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         //this vars/$scopes will only hold current playlist/index, this will be used when addings songs to the right playlist.
         var syncCurrentPlaylist = null;
         $scope.currentIdx = $firebase(ref.child("currentIndex")).$asObject();
-        $scope.currentIdx.$watch(function(){
+
+        $scope.currentIdx.$watch(function(){ //watched for change in current index so it can update syncIndex
+                                             //syncIndex is used in other functions
             $scope.currentIdx.$loaded().then(function (data) {
                 $scope.syncIndex = data.$value;
             });
-        })
+        });
 
         $scope.currentPlaylist = $firebase(ref.child("currentPlayList")).$asObject();
         $scope.currentPlaylist.$loaded().then(function(data){
@@ -182,7 +184,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
             syncCurrentPlaylist = data.$value;
             $scope.playListArray = $firebase(ref.child("playlist").child(syncCurrentPlaylist)).$asArray();
             $scope.playListArray.$loaded().then(function(data){
-                console.log("$scope.playListArray:", data);
+                console.log("$scope.playListArray:", data.length);
                 $scope.syncPlaylistArray = data;
             })
         });
@@ -201,11 +203,21 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
             autoplay: 1 //auto play video = true;
         };
         $scope.$on('youtube.player.ended', function ($event, player) { //action once video ends.
-            console.log("nextIndex:", $scope.syncIndex + 1);
+            console.log("nextIndex:", $scope.syncIndex + 1,"/");
+            var nextIdx = $scope.syncIndex + 1;
+            var playlist = $scope.syncPlaylistArray;
+            var playlistLength = playlist.length;
+
+            if( nextIdx == playlistLength){ //failsafe for if user is at the end of playlist
+
+                console.log("end of playlist, starting over");
+                console.log("NEXT:", $scope.syncPlaylistArray[0]);
+
+                return $scope.newVideo(playlist[0].id, 0) //play video at the beginning of array
+            }
 
             console.log("NEXT:", $scope.syncPlaylistArray[$scope.syncIndex + 1]);
-
-            $scope.newVideo($scope.syncPlaylistArray[$scope.syncIndex + 1].id, $scope.syncIndex + 1);
+            $scope.newVideo(playlist[nextIdx].id, nextIdx);
 
         });
 
