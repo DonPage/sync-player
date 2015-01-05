@@ -87,7 +87,7 @@
                 <md-content class="shop-wrapper">
                     <section>
                         <md-subheader layout="row" md-theme="indigo" class="md-primary">
-                            <div>playlist: {{ room.currentPlayList }} ({{ room.currentIndex }})</div>
+                            <div>playlist: {{ room.currentPlayList }} ({{ syncIndex }})</div>
                         </md-subheader>
                         <md-list layout="column">
                             <md-item class="result-item" ng-repeat="song in syncPlaylistArray track by $index">

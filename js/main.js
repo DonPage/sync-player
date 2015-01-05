@@ -167,15 +167,22 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
         var devices = $firebase(ref.child("devices"));
 
 
-        //this vars/$scopes will only hold current playlist, this will be used when addings songs to the right playlist.
+        //this vars/$scopes will only hold current playlist/index, this will be used when addings songs to the right playlist.
         var syncCurrentPlaylist = null;
+        $scope.currentIdx = $firebase(ref.child("currentIndex")).$asObject();
+        $scope.currentIdx.$watch(function(){
+            $scope.currentIdx.$loaded().then(function (data) {
+                $scope.syncIndex = data.$value;
+            });
+        })
+
         $scope.currentPlaylist = $firebase(ref.child("currentPlayList")).$asObject();
         $scope.currentPlaylist.$loaded().then(function(data){
             console.log("$scope.currentPlaylist:", data.$value);
             syncCurrentPlaylist = data.$value;
             $scope.playListArray = $firebase(ref.child("playlist").child(syncCurrentPlaylist)).$asArray();
             $scope.playListArray.$loaded().then(function(data){
-                console.log("$scope.playListArray:", data[0]);
+                console.log("$scope.playListArray:", data);
                 $scope.syncPlaylistArray = data;
             })
         });
@@ -188,6 +195,19 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         syncObj.$bindTo($scope, "room");
         console.log("syncObj", ref);
+
+        //youtube player vars
+        $scope.playerVar = {
+            autoplay: 1 //auto play video = true;
+        };
+        $scope.$on('youtube.player.ended', function ($event, player) { //action once video ends.
+            console.log("nextIndex:", $scope.syncIndex + 1);
+
+            console.log("NEXT:", $scope.syncPlaylistArray[$scope.syncIndex + 1]);
+
+            $scope.newVideo($scope.syncPlaylistArray[$scope.syncIndex + 1].id, $scope.syncIndex + 1);
+
+        });
 
 
 //        console.log($firebase(devices).$asObject());
@@ -207,6 +227,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
 
         //plays new video from search array
         $scope.newVideo = function (vidLink, idx) {
+            console.log("newVideo:", vidLink, idx);
             var id = youtubeEmbedUtils.getIdFromURL(vidLink);
             fb.$update({
                 nowPlaying: id,
