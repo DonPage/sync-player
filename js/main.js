@@ -213,7 +213,7 @@ angular.module("sync-player", [ 'ngRoute', 'ngMaterial', 'ngRoute', 'firebase', 
                 console.log("end of playlist, starting over");
                 console.log("NEXT:", $scope.syncPlaylistArray[0]);
 
-                return $scope.newVideo(playlist[0].id, 0) //play video at the beginning of array
+                return $scope.newVideo(playlist[0].id, 0); //play video at the beginning of array
             }
 
             console.log("NEXT:", $scope.syncPlaylistArray[$scope.syncIndex + 1]);
